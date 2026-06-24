@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peater Parker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="DomeGallery.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/",
+            "ogl": "https://cdn.jsdelivr.net/npm/ogl@1.0.11/src/index.js"
+        }
+    }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="background">
+            <header>
+                <div id="logo-area">
+                    <p id="navsm1">SPIDER-MAN</p>
+                    <span id="navsm2">The New Chapter Begins</span>
+                </div>
+                <nav class="top-nav">
+                    <a href="#gallery-section">GALLERY</a>
+                    <a href="#pagethree">CAST</a>
+                    <a id="ticket" href="#">GET TICKETS</a>
+                </nav>
+            </header>
+
+            <video src="Assets/videos/Heroo.mp4" autoplay muted loop></video>
+
+            <div class="hero-content">
+                <p>SPIDER-MAN</p>
+                <span class="bnd">Brand New day</span>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="pagetwo">
+        <div class="pagetwo-content">
+            <h1>SPIDER-MAN</h1>
+        </div>
+
+        <div id="card1">
+            <span><strong>Peter Parker’s New Lonely Life </strong><br>Peter is living alone in New York after everyone
+                forgets his identity.<br>
+                He continues being Spider-Man without any support from MJ or Ned, showing a very isolated and emotional
+                side of his life.</span>
+        </div>
+
+        <div id="card2">
+            <span><strong>Darker and More Dangerous Spider-Man Era</strong><br>The trailer shows Peter becoming more
+                intense and “full-time Spider-Man,” fighting crime constantly as pressure builds. His powers also seem
+                unstable or evolving.</span>
+        </div>
+
+        <div id="card3">
+            <span><strong>Team-Up with Unexpected Heroes</strong><br>Spider-Man is not alone in fights anymore — the
+                trailer hints at alliances with characters like Punisher and Hulk, showing bigger MCU crossover
+                action.</span>
+        </div>
+
+        <div id="card4">
+            <span><strong>New Threats and Physical Changes</strong><br>A mysterious villain and strange crime patterns
+                are introduced, and Peter may be undergoing a physical transformation that changes how he fights.</span>
+        </div>
+
+
+        <canvas id="bg"></canvas>
+
+    </section>
+
+    <section class="pagefour">
+        <canvas id="spider-canvas"></canvas>
+        <div class="big-text">
+            <h1 id="bigtext1">Surrounded</h1>
+            <h2 id="bigtext2">but never finished</h2>
+        </div>
+        <script type="module" src="script2.js"></script>
+    </section>
+
+    <section class="pagefive">
+        <canvas id="spider-canvas-2"></canvas>
+        <div class="big-textt">
+            <h1 id="bigtext3"><strong>PETER PARKER:</strong></h1>
+            <p id="bigtext4">THE MAN BEHIND THE MASK</p>
+        </div>
+    </section>
+
+    <section id="symbiote-section">
+        <div class="mask-container">
+            <canvas class="particles-bg"></canvas>
+            <h1 class="symbiote-text left">A NEW SUIT</h1>
+            <img class="mask-symbiote" src="Assets/pics/brand.png">
+            <h1 class="symbiote-text right">FOR A NEW WAR</h1>
+        </div>
+    </section>
+
+    <section class="Title">
+        <canvas id="title-canvas"></canvas>
+        <div class="title-text title-text-1">
+            <h1 class="from-loss">LOSS</h1>
+            <p class="loss-desc">He lost more than a battle.<br>He lost the people who meant everything.</p>
+        </div>
+        <div class="title-text title-text-2">
+            <h1 class="from-loss">SACRIFICE</h1>
+            <p class="loss-desc">To save the world,<br>he gave up the life he once knew.</p>
+        </div>
+        <div class="title-text title-text-3">
+            <h1 class="from-loss">HOPE</h1>
+            <p class="loss-desc">Even in the darkest moments,<br>he found a reason to keep moving forward.</p>
+        </div>
+    </section>
+
+
+
+    <section id="pagethree">
+        <div class="cast">
+            <p>CAST MEMBERS</p>
+        </div>
+        <script type="module" src="circular-gallery.js"></script>
+        <div class="cast-container">
+            <div class="castname">
+
+            </div>
+        </div>
+    </section>
+
+
+
+    <section id="gallery-section">
+        <h1 class="gallery-title">GALLERY</h1>
+        <div id="dome-gallery-root"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>PETER PARKER</h2>
+                <p>THE SPIDER-MAN</p>
+            </div>
+
+            <div class="footer-links">
+                <!-- Trailer Link -->
+                <a href="https://youtu.be/62bIsvRcPv0?si=fdsTfDwczG6w5CuO" target="_blank"
+                    class="footer-btn trailer-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round" class="play-icon">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    WATCH TRAILER
+                </a>
+
+                <!-- 3D Suits Link (Creative) -->
+                <a href="suits/index.html" target="_blank" class="footer-btn suits-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round" class="suit-icon">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                    INTERACTIVE SUITS (BETA)
+                </a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Developed by <span class="dev-name">M.K.Nikethan</span></p>
+        </div>
+    </footer>
+
+
+
+    <script src="particles.js"></script>
+    <script src="dome-gallery.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>
