@@ -223,12 +223,12 @@ if (pageTwo) {
 const castContainer = document.querySelector('#pagethree .cast-container');
 if (castContainer) {
     const castItems = [
-        { image: 'Assets/pics/tom.png', text: 'Tom Holland' },
-        { image: 'Assets/pics/Zendaya.jpg', text: 'Zendaya' },
-        { image: 'Assets/pics/jacob.jpg', text: 'Jacob Batalon' },
-        { image: 'Assets/pics/jon.jpg', text: 'Jon Bernthal' },
-        { image: 'Assets/pics/mark.jpg', text: 'Mark Ruffalo' },
-        { image: 'Assets/pics/sadie.jpg', text: 'Sadie Sink' }
+        { image: 'Assets/Pics/Tom.png', text: 'Tom Holland' },
+        { image: 'Assets/Pics/zendaya.jpg', text: 'Zendaya' },
+        { image: 'Assets/Pics/jacob.jpg', text: 'Jacob Batalon' },
+        { image: 'Assets/Pics/jon.jpg', text: 'Jon Bernthal' },
+        { image: 'Assets/Pics/mark.jpg', text: 'Mark Ruffalo' },
+        { image: 'Assets/Pics/sadie.jpg', text: 'Sadie Sink' }
     ];
 
     initCircularGallery(castContainer, {
