@@ -83,7 +83,7 @@ loader.setMeshoptDecoder(MeshoptDecoder);
 console.log("Starting to load optimized 3D model...");
 
 loader.load(
-    "Assets/Logo/SpideyLogo-optimized.glb",
+    "Assets/3d/SpideyLogo-optimized.glb",
     // onLoad
     (gltf) => {
         console.log("Model loaded successfully!");
@@ -231,6 +231,7 @@ if (castContainer) {
         { image: 'Assets/Pics/sadie.jpg', text: 'Sadie Sink' }
     ];
 
+
     initCircularGallery(castContainer, {
         items: castItems,
         bend: 3,
@@ -293,7 +294,7 @@ if (textElement2) {
 }
 
 // Symbiote Infection Scroll Animation
-gsap.fromTo(".mask-symbiote", 
+gsap.fromTo(".mask-symbiote",
     { clipPath: "inset(100% 0% 0% 0%)" },
     {
         clipPath: "inset(0% 0% 0% 0%)", // Reveal fully from bottom up

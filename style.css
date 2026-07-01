@@ -4,6 +4,206 @@
     box-sizing: border-box;
 }
 
+/* ═══════════ SPIDER-MAN LOADING SCREEN ═══════════ */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 70%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#web-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Spider Emblem */
+.loader-emblem {
+    position: relative;
+    z-index: 2;
+    width: 120px;
+    height: 120px;
+    animation: spiderPulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(226, 54, 54, 0.6))
+            drop-shadow(0 0 60px rgba(226, 54, 54, 0.2));
+}
+
+.loader-logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+@keyframes spiderPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(226, 54, 54, 0.6)) drop-shadow(0 0 60px rgba(226, 54, 54, 0.2)); }
+    50% { transform: scale(1.08); filter: drop-shadow(0 0 35px rgba(226, 54, 54, 0.9)) drop-shadow(0 0 80px rgba(226, 54, 54, 0.4)); }
+}
+
+/* Title */
+.loader-title {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    margin-top: 28px;
+    animation: fadeSlideUp 0.8s ease-out 0.3s both;
+}
+
+.loader-spider-text {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    font-size: 2.8rem;
+    letter-spacing: 12px;
+    color: #e23636;
+    text-shadow:
+        0 0 10px rgba(226, 54, 54, 0.5),
+        0 0 40px rgba(226, 54, 54, 0.2),
+        0 2px 8px rgba(0,0,0,0.8);
+}
+
+.loader-sub-text {
+    display: block;
+    font-family: 'Great Vibes', cursive;
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 4px;
+    margin-top: 4px;
+}
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Progress Bar */
+.loader-progress-container {
+    position: relative;
+    z-index: 2;
+    width: min(400px, 75vw);
+    margin-top: 40px;
+    animation: fadeSlideUp 0.8s ease-out 0.6s both;
+}
+
+.loader-progress-track {
+    position: relative;
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.loader-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #8b1a1a, #e23636, #ff4c4c);
+    border-radius: 4px;
+    transition: width 0.1s ease-out;
+}
+
+.loader-progress-glow {
+    position: absolute;
+    top: -4px;
+    left: 0;
+    height: calc(100% + 8px);
+    width: 0%;
+    background: linear-gradient(90deg, transparent, rgba(226, 54, 54, 0.4), transparent);
+    border-radius: 4px;
+    filter: blur(6px);
+    transition: width 0.1s ease-out;
+    animation: progressSweep 2s ease-in-out infinite;
+}
+
+@keyframes progressSweep {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+.loader-progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.loader-status {
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.loader-percent {
+    color: #e23636;
+    font-weight: 700;
+    text-shadow: 0 0 10px rgba(226, 54, 54, 0.4);
+}
+
+/* Web Strand Decorations */
+.web-strand {
+    position: absolute;
+    z-index: 1;
+    background: linear-gradient(to bottom, rgba(226, 54, 54, 0.15), transparent);
+    width: 1px;
+    transform-origin: top center;
+}
+
+.strand-1 {
+    top: 0;
+    left: 18%;
+    height: 35%;
+    animation: strandDrop 1s ease-out 0.1s both, strandSway 4s ease-in-out 1.1s infinite;
+}
+.strand-2 {
+    top: 0;
+    right: 22%;
+    height: 28%;
+    animation: strandDrop 1s ease-out 0.3s both, strandSway 3.5s ease-in-out 1.3s infinite;
+}
+.strand-3 {
+    top: 0;
+    left: 40%;
+    height: 18%;
+    animation: strandDrop 1s ease-out 0.5s both, strandSway 5s ease-in-out 1.5s infinite;
+}
+.strand-4 {
+    top: 0;
+    right: 35%;
+    height: 22%;
+    animation: strandDrop 1s ease-out 0.7s both, strandSway 4.5s ease-in-out 1.7s infinite;
+}
+
+@keyframes strandDrop {
+    from { scaleY: 0; opacity: 0; }
+    to { scaleY: 1; opacity: 1; }
+}
+
+@keyframes strandSway {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(1.5deg); }
+    75% { transform: rotate(-1.5deg); }
+}
+
+/* ═══════════ END LOADING SCREEN CSS ═══════════ */
+
+
 html,
 body {
 
@@ -53,6 +253,7 @@ body {
     font-size: 180px;
     text-align: center;
     animation: change 2s ease forwards;
+    animation-play-state: paused;
 }
 
 .hero-content::after {
@@ -76,6 +277,7 @@ body {
             6% 100%);
 
     animation: line 2s ease forwards;
+    animation-play-state: paused;
 
 }
 
@@ -130,6 +332,7 @@ body {
     transform: scaleY(1.2);
     white-space: nowrap;
     animation: fade 5s ease forwards;
+    animation-play-state: paused;
 }
 
 @keyframes fade {
@@ -152,6 +355,13 @@ body {
     100% {
         opacity: 1;
     }
+}
+
+/* Unfreeze hero animations only after loader dismisses */
+body.loaded .hero-content p,
+body.loaded .hero-content::after,
+body.loaded .bnd {
+    animation-play-state: running;
 }
 
 #navsm1 {

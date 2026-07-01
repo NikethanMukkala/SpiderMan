@@ -24,6 +24,41 @@
 
 <body>
 
+    <!-- ═══════════ SPIDER-MAN LOADING SCREEN ═══════════ -->
+    <div id="loading-screen">
+        <canvas id="web-canvas"></canvas>
+
+        <!-- Glowing spider emblem -->
+        <div class="loader-emblem">
+            <img class="loader-logo-img" src="Assets/LoaderLogo.png" alt="Spider-Man Logo">
+        </div>
+
+        <!-- Title text -->
+        <div class="loader-title">
+            <span class="loader-spider-text">SPIDER-MAN</span>
+            <span class="loader-sub-text">Brand New Day</span>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="loader-progress-container">
+            <div class="loader-progress-track">
+                <div class="loader-progress-bar" id="loader-progress-bar"></div>
+                <div class="loader-progress-glow" id="loader-progress-glow"></div>
+            </div>
+            <div class="loader-progress-info">
+                <span class="loader-status" id="loader-status">Initializing...</span>
+                <span class="loader-percent" id="loader-percent">0%</span>
+            </div>
+        </div>
+
+        <!-- Web strand decorations (CSS animated) -->
+        <div class="web-strand strand-1"></div>
+        <div class="web-strand strand-2"></div>
+        <div class="web-strand strand-3"></div>
+        <div class="web-strand strand-4"></div>
+    </div>
+    <!-- ═══════════ END LOADING SCREEN ═══════════ -->
+
     <section class="hero">
         <div class="background">
             <header>
@@ -38,7 +73,7 @@
                 </nav>
             </header>
 
-            <video src="Assets/videos/Heroo.mp4" autoplay muted loop></video>
+            <video id="hero-video" src="Assets/videos/Heroo.mp4" muted loop preload="auto"></video>
 
             <div class="hero-content">
                 <p>SPIDER-MAN</p>
@@ -182,6 +217,233 @@
     </footer>
 
 
+
+    <!-- Loading Screen Script (must be before other scripts) -->
+    <script>
+        (function () {
+            const screen = document.getElementById('loading-screen');
+            const bar = document.getElementById('loader-progress-bar');
+            const glow = document.getElementById('loader-progress-glow');
+            const status = document.getElementById('loader-status');
+            const percent = document.getElementById('loader-percent');
+            const canvas = document.getElementById('web-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Lock scroll during loading
+            document.body.style.overflow = 'hidden';
+
+            // ─── Web Canvas Animation ───
+            let animFrame;
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Web ring parameters
+            const centerX = () => canvas.width / 2;
+            const centerY = () => canvas.height / 2;
+            const maxRadius = () => Math.max(canvas.width, canvas.height) * 0.7;
+
+            function drawWeb(time) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const cx = centerX(), cy = centerY(), mr = maxRadius();
+                const numRadials = 24;
+                const numRings = 10;
+                const pulse = Math.sin(time * 0.001) * 0.03 + 1;
+
+                // Draw radial lines
+                for (let i = 0; i < numRadials; i++) {
+                    const angle = (i / numRadials) * Math.PI * 2;
+                    const wobble = Math.sin(time * 0.002 + i * 0.5) * 8;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy);
+                    ctx.lineTo(
+                        cx + Math.cos(angle) * (mr * pulse + wobble),
+                        cy + Math.sin(angle) * (mr * pulse + wobble)
+                    );
+                    ctx.strokeStyle = 'rgba(226, 54, 54, 0.12)';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                }
+
+                // Draw concentric spiral rings
+                for (let r = 1; r <= numRings; r++) {
+                    const radius = (r / numRings) * mr * 0.6 * pulse;
+                    const offset = Math.sin(time * 0.0015 + r) * 5;
+                    ctx.beginPath();
+                    for (let a = 0; a <= Math.PI * 2; a += 0.05) {
+                        const wobble = Math.sin(a * numRadials * 0.5 + time * 0.003) * 3;
+                        const x = cx + Math.cos(a) * (radius + wobble + offset);
+                        const y = cy + Math.sin(a) * (radius + wobble + offset);
+                        if (a === 0) ctx.moveTo(x, y);
+                        else ctx.lineTo(x, y);
+                    }
+                    ctx.closePath();
+                    ctx.strokeStyle = `rgba(226, 54, 54, ${0.06 + r * 0.01})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+                }
+
+                // Floating particles
+                for (let i = 0; i < 30; i++) {
+                    const angle = (time * 0.0003 + i * 0.21) % (Math.PI * 2);
+                    const dist = (150 + i * 12 + Math.sin(time * 0.002 + i) * 30);
+                    const x = cx + Math.cos(angle) * dist;
+                    const y = cy + Math.sin(angle) * dist;
+                    const size = 1 + Math.sin(time * 0.005 + i) * 0.8;
+                    const alpha = 0.3 + Math.sin(time * 0.003 + i * 0.7) * 0.2;
+                    ctx.beginPath();
+                    ctx.arc(x, y, size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(226, 54, 54, ${alpha})`;
+                    ctx.fill();
+                }
+
+                animFrame = requestAnimationFrame(drawWeb);
+            }
+            animFrame = requestAnimationFrame(drawWeb);
+
+            // ─── Resource Loading Tracker ───
+            let progress = 0;
+            let targetProgress = 0;
+            const loadingMessages = [
+                'Spinning webs...',
+                'Suiting up...',
+                'Calibrating web shooters...',
+                'Loading the multiverse...',
+                'Parker luck activating...',
+                'Almost there, Spidey...'
+            ];
+
+            function setProgress(val, msg) {
+                targetProgress = Math.min(val, 100);
+                if (msg) status.textContent = msg;
+            }
+
+            // Smooth progress animation
+            function animateProgress() {
+                if (progress < targetProgress) {
+                    progress += (targetProgress - progress) * 0.08;
+                    if (targetProgress - progress < 0.5) progress = targetProgress;
+                    const rounded = Math.round(progress);
+                    bar.style.width = rounded + '%';
+                    glow.style.width = rounded + '%';
+                    percent.textContent = rounded + '%';
+                }
+                if (progress < 100) {
+                    requestAnimationFrame(animateProgress);
+                }
+            }
+            animateProgress();
+
+            // Track all resources
+            const images = Array.from(document.images);
+            const videos = Array.from(document.querySelectorAll('video'));
+            const totalResources = images.length + videos.length + 2; // +2 for fonts & scripts
+            let loadedResources = 0;
+
+            function resourceLoaded() {
+                loadedResources++;
+                const pct = Math.min((loadedResources / totalResources) * 90, 90); // reserve last 10% for final
+                const msgIdx = Math.floor((pct / 90) * loadingMessages.length);
+                setProgress(pct, loadingMessages[Math.min(msgIdx, loadingMessages.length - 1)]);
+            }
+
+            // Track images
+            images.forEach(img => {
+                if (img.complete) { resourceLoaded(); }
+                else {
+                    img.addEventListener('load', resourceLoaded);
+                    img.addEventListener('error', resourceLoaded);
+                }
+            });
+
+            // Track videos
+            videos.forEach(vid => {
+                if (vid.readyState >= 3) { resourceLoaded(); }
+                else {
+                    vid.addEventListener('canplaythrough', resourceLoaded, { once: true });
+                    vid.addEventListener('error', resourceLoaded, { once: true });
+                }
+            });
+
+            // Track fonts
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(resourceLoaded);
+            } else { resourceLoaded(); }
+
+            // Dismiss function
+            function dismissLoader() {
+                setProgress(100, 'Welcome, Web-Head!');
+
+                // Wait for progress bar to visually reach 100%
+                setTimeout(() => {
+                    cancelAnimationFrame(animFrame);
+
+                    // GSAP cinematic dismiss
+                    const tl = gsap.timeline({
+                        onComplete: () => {
+                            screen.remove();
+                            document.body.style.overflow = '';
+                            document.body.classList.add('loaded');
+                            // Start hero video from the beginning
+                            const heroVid = document.getElementById('hero-video');
+                            if (heroVid) { heroVid.currentTime = 0; heroVid.play(); }
+                        }
+                    });
+
+                    tl.to('.loader-emblem', {
+                        scale: 1.3,
+                        duration: 0.3,
+                        ease: 'power2.in'
+                    })
+                        .to('.loader-emblem', {
+                            scale: 40,
+                            opacity: 0,
+                            duration: 0.8,
+                            ease: 'power4.in'
+                        })
+                        .to('.loader-title, .loader-progress-container', {
+                            opacity: 0,
+                            y: 30,
+                            duration: 0.4,
+                            ease: 'power2.in'
+                        }, '-=0.7')
+                        .to('.web-strand', {
+                            scaleY: 0,
+                            opacity: 0,
+                            duration: 0.3,
+                            stagger: 0.05,
+                            ease: 'power2.in'
+                        }, '-=0.5')
+                        .to('#web-canvas', {
+                            opacity: 0,
+                            duration: 0.4
+                        }, '-=0.4')
+                        .to('#loading-screen', {
+                            opacity: 0,
+                            duration: 0.5,
+                            ease: 'power2.inOut'
+                        }, '-=0.2');
+                }, 600);
+            }
+
+            // Final trigger: window load
+            window.addEventListener('load', () => {
+                resourceLoaded(); // scripts done
+                // Small delay to let everything settle
+                setTimeout(dismissLoader, 800);
+            });
+
+            // Safety timeout — dismiss after 12s no matter what
+            setTimeout(() => {
+                if (document.getElementById('loading-screen')) {
+                    dismissLoader();
+                }
+            }, 12000);
+        })();
+    </script>
 
     <script src="particles.js"></script>
     <script src="dome-gallery.js"></script>
