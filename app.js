@@ -83,7 +83,7 @@ loader.setMeshoptDecoder(MeshoptDecoder);
 console.log("Starting to load optimized 3D model...");
 
 loader.load(
-    "Assets/3d/SpideyLogo-optimized.glb",
+    "Assets/Logo/SpideyLogo-optimized.glb",
     // onLoad
     (gltf) => {
         console.log("Model loaded successfully!");

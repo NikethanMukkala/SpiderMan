@@ -230,6 +230,7 @@
             const ctx = canvas.getContext('2d');
 
             // Lock scroll during loading
+            document.documentElement.style.overflow = 'hidden';
             document.body.style.overflow = 'hidden';
 
             // ─── Web Canvas Animation ───
@@ -385,6 +386,7 @@
                     const tl = gsap.timeline({
                         onComplete: () => {
                             screen.remove();
+                            document.documentElement.style.overflow = '';
                             document.body.style.overflow = '';
                             document.body.classList.add('loaded');
                             // Start hero video from the beginning

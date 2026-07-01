@@ -206,9 +206,15 @@
 
 html,
 body {
-
     scroll-behavior: smooth;
     background-color: black;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+body:not(.loaded),
+html:has(body:not(.loaded)) {
+    overflow: hidden !important;
 }
 
 .particles-bg {
@@ -425,7 +431,7 @@ a {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 40px 30px rgba(0, 0, 0, 0.1);
-    width: 100vw;
+    width: 100%;
     color: white;
     position: relative;
     z-index: 1;
