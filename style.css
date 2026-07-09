@@ -209,7 +209,6 @@ body {
     scroll-behavior: smooth;
     background-color: black;
     overflow-x: hidden;
-    width: 100%;
 }
 
 body:not(.loaded),
@@ -351,7 +350,7 @@ html:has(body:not(.loaded)) {
     50% {
         opacity: 0;
         filter: blur(2px);
-        letter-spacing: 40PX;
+        letter-spacing: 40px;
     }
 
     73% {
@@ -936,7 +935,7 @@ a {
     font-size: 12px;
     text-transform: uppercase;
     text-align: center;
-    left: 50%;
+
 }
 
 .footer-links {

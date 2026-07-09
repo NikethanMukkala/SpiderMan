@@ -94,7 +94,7 @@ images[0].onload = function () {
 
 // --- THE SCROLL ANIMATION ---
 gsap.to(spiderman, {
-    frame: frameCount - 1,   // Animate our object all the way to frame 203
+    frame: frameCount - 1,   // Animate our object all the way to the last frame
     snap: "frame",           // Make sure we only use whole numbers (no half frames)
     ease: "none",
     scrollTrigger: {

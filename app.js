@@ -177,7 +177,7 @@ const pageTwoObserver = new IntersectionObserver((entries) => {
             pageTwoObserver.unobserve(entry.target);
         }
     });
-}, { threshold: 0.4 }); // Triggers when 30% of the section is visible
+}, { threshold: 0.4 }); // Triggers when 40% of the section is visible
 
 const pageTwo = document.getElementById('pagetwo');
 if (pageTwo) {
