@@ -158,6 +158,7 @@ loader.setMeshoptDecoder(MeshoptDecoder);
 
 const wrappers = new Array(SUITS.length).fill(null);
 let loadedCount = 0;
+let currentIndex = 0; // Declared here so loader callbacks can safely reference it
 
 // Platform group — holds the currently visible model
 const platform = new THREE.Group();
@@ -249,8 +250,6 @@ SUITS.forEach((suit, index) => {
 // ═══════════════════════════════════════════
 //  NAVIGATION STATE
 // ═══════════════════════════════════════════
-let currentIndex = 0;
-
 const suitName = document.getElementById("suit-name");
 const suitCounter = document.getElementById("suit-counter");
 const btnPrev = document.getElementById("btn-prev");

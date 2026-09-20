@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Spider-Man Identity Reveal</title>
+  
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%; height: 100%; margin: 0; overflow: hidden; background: #000;
+    }
+
+    .viewport {
+      position: fixed; inset: 0; overflow: hidden; isolation: isolate;
+      background: #000;
+    }
+
+    .stage {
+      container-type: inline-size; position: absolute; left: 50%; top: 50%;
+      width: 1536px; height: 1024px; transform-origin: center; overflow: hidden;
+      background: transparent;
+    }
+
+    /* SPOTLIGHT */
+    .hero { 
+      position: absolute; left: calc(50% - 512px); top: calc(50% - 341px); 
+      width: 1024px; height: 682px; z-index: 7; pointer-events: none; 
+    }
+    .hero-stack { position: relative; width: 100%; height: 100%; pointer-events: auto; }
+    .hero-back, .hero-front { 
+      position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; 
+      object-fit: cover; object-position: center top;
+    }
+    .hero-front { z-index: 1; filter: drop-shadow(12px 17px 24px rgba(0,0,0,.5)); }
+    .hero-back { 
+      z-index: 2; 
+      mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat; 
+      mask-size: 100% 100%; -webkit-mask-size: 100% 100%; 
+      mask-mode: alpha; 
+    }
+    .hero-mask-canvas { position: absolute; inset: 0; pointer-events: none; display: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+    }
+
+    /* TIER B - MOBILE */
+    .stage.is-mobile {
+      width: 640px !important; height: 1366px !important;
+    }
+    .stage.is-mobile .hero { 
+      left: calc(50% - 300px); top: calc(50% - 200px); width: 600px; height: 400px; 
+    }
+
+    /* TIER C - PHONE GRID */
+    @media (max-width:520px) and (orientation:portrait) {
+      html, body { height: auto; min-height: 100%; overflow-x: hidden; overflow-y: auto; }
+      .viewport { position: relative; inset: auto; min-height: 100svh; overflow: visible; display: flex; align-items: center; justify-content: center; }
+      .stage.is-phone {
+        position: relative !important; left: auto !important; top: auto !important; width: 100% !important; height: auto !important;
+        min-height: 100svh; transform: none !important; display: flex; align-items: center; justify-content: center;
+        padding: 24px;
+      }
+      .stage.is-phone .hero { 
+        position: relative; left: auto; top: auto; width: 100%; max-width: 500px; height: auto; aspect-ratio: 1024/682;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<main class="viewport">
+  <div class="stage">
+    <div class="hero" id="hero">
+      <div class="hero-stack">
+        <img class="hero-front" src="./img1.png" alt="Tom Holland Suit">
+        <img class="hero-back" src="./img2.png" alt="Spider-Man Suit">
+        <canvas class="hero-mask-canvas" aria-hidden="true"></canvas>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // 1. CORE LAYOUT
+  const stage = document.querySelector('.stage');
+  const hero = document.getElementById('hero');
+
+  function layout() {
+    const PHONE = matchMedia('(max-width:520px) and (orientation:portrait)').matches;
+    if (PHONE) {
+      stage.classList.remove('is-mobile', 'is-fit');
+      stage.classList.add('is-phone');
+      stage.style.width = ''; stage.style.height = ''; stage.style.transform = '';
+      return;
+    }
+    stage.classList.remove('is-phone');
+    const w = window.innerWidth, h = window.innerHeight;
+    const mobile = (w / h) < 1.05;
+    stage.classList.toggle('is-mobile', mobile);
+    
+    const bh = mobile ? 1366 : 1024;
+    const ideal = Math.round(bh * w / h);
+    const lo = mobile ? 560 : 1060;
+    const hi = mobile ? 1450 : 2600;
+    const bw = Math.max(lo, Math.min(hi, ideal));
+    const s = Math.min(w/bw, h/bh);
+    
+    stage.classList.toggle('is-fit', Math.abs(ideal-bw) > 1);
+    
+    stage.style.width = bw + 'px';
+    stage.style.height = bh + 'px';
+    stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+  }
+  
+  window.addEventListener('resize', layout, {passive: true});
+  layout();
+
+  // 2. SPOTLIGHT REVEAL
+  (function(){
+    const stack = document.querySelector('.hero-stack');
+    const back = document.querySelector('.hero-back');
+    const canvas = document.querySelector('.hero-mask-canvas');
+    if(!stack || !back || !canvas) return;
+    const ctx = canvas.getContext('2d');
+    const SPOTLIGHT_R = 185;
+    const mouse = {x: -9999, y: -9999}, smooth = {x: -9999, y: -9999};
+
+    function resizeCanvas() {
+      canvas.width = stack.offsetWidth;
+      canvas.height = stack.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas, {passive: true});
+
+    stack.addEventListener('pointermove', e => {
+      const r = stack.getBoundingClientRect();
+      const sx = stack.offsetWidth / r.width;
+      const sy = stack.offsetHeight / r.height;
+      mouse.x = (e.clientX - r.left) * sx;
+      mouse.y = (e.clientY - r.top) * sy;
+    });
+    stack.addEventListener('pointerleave', () => {
+      mouse.x = -9999;
+      mouse.y = -9999;
+    });
+
+    function render(x, y) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, SPOTLIGHT_R);
+      grad.addColorStop(0, 'rgba(255,255,255,1)');
+      grad.addColorStop(0.62, 'rgba(255,255,255,1)');
+      grad.addColorStop(0.8, 'rgba(255,255,255,0.5)');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(x, y, SPOTLIGHT_R, 0, Math.PI*2);
+      ctx.fill();
+      const url = canvas.toDataURL();
+      back.style.maskImage = `url(${url})`;
+      back.style.webkitMaskImage = `url(${url})`;
+    }
+
+    function loop() {
+      smooth.x += (mouse.x - smooth.x) * 0.1;
+      smooth.y += (mouse.y - smooth.y) * 0.1;
+      render(smooth.x, smooth.y);
+      requestAnimationFrame(loop);
+    }
+    loop();
+  })();
+</script>
+</body>
+</html>

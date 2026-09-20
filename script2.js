@@ -9,23 +9,8 @@ const context = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Single unified resize handler for all three canvases
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    renderFrame(spiderman.frame);
 
-    canvas2.width = window.innerWidth;
-    canvas2.height = window.innerHeight;
-    renderFrame2(spiderman2.frame);
-
-    canvas3.width = window.innerWidth;
-    canvas3.height = window.innerHeight;
-    renderFrame3(spiderman3.frame);
-});
-
-
-// We extracted exactly 52 frames from your video!
+// 50 frames extracted from the video
 const frameCount = 50;
 
 // This function creates the file path for each image (e.g., frames/0001.jpg)
@@ -101,7 +86,7 @@ gsap.to(spiderman, {
         trigger: ".pagefour", // Start animating when we hit this section
         start: "top top",             // When the top of the section hits the top of the screen
         end: "+=120%",                // Make the scrolling area 1.5x the screen height
-        scrub: 1,                     // Scrub smoothly (ties it directly to the scrollbar)
+        scrub: true,                  // Instant scrub since Lenis makes the scroll wheel smooth
         pin: true                     // Pin the section so it freezes on screen while the video plays!
     },
     onUpdate: function () {
@@ -183,8 +168,8 @@ gsap.to(spiderman2, {
     scrollTrigger: {
         trigger: ".pagefive",
         start: "top top",
-        end: "+=400%",
-        scrub: 1,
+        end: "+=120%",
+        scrub: true,
         pin: true
     },
     onUpdate: function () {
@@ -212,7 +197,7 @@ const currentFrame3 = index => (
 
 const images3 = [];
 const spiderman3 = {
-    frame: 0
+    frame: 5
 };
 
 for (let i = 0; i < frameCount3; i++) {
@@ -257,6 +242,23 @@ function renderFrame3(index) {
 images3[0].onload = function () {
     renderFrame3(0);
 };
+
+// ─── Unified resize handler ───
+// Placed here (bottom of file) so canvas, canvas2, and canvas3 are
+// all guaranteed to be declared before this handler can reference them.
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    renderFrame(spiderman.frame);
+
+    canvas2.width = window.innerWidth;
+    canvas2.height = window.innerHeight;
+    renderFrame2(spiderman2.frame);
+
+    canvas3.width = window.innerWidth;
+    canvas3.height = window.innerHeight;
+    renderFrame3(spiderman3.frame);
+});
 
 gsap.to(spiderman3, {
     frame: frameCount3 - 1,

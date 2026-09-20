@@ -191,8 +191,8 @@
 }
 
 @keyframes strandDrop {
-    from { scaleY: 0; opacity: 0; }
-    to { scaleY: 1; opacity: 1; }
+    from { transform: scaleY(0); opacity: 0; }
+    to { transform: scaleY(1); opacity: 1; }
 }
 
 @keyframes strandSway {
@@ -773,81 +773,6 @@ a {
     height: 100%;
 }
 
-/* Symbiote Section */
-#symbiote-section {
-    position: relative;
-    height: 300vh;
-    /* Tall enough to allow scrolling */
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-}
-
-.mask-container {
-    position: sticky;
-    top: 0;
-    /* Sticks to the top of the screen */
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-12px);
-    }
-
-    100% {
-        transform: translateY(0px);
-    }
-}
-
-.mask-classic,
-.mask-symbiote {
-    position: absolute;
-    height: 80vh;
-    width: auto;
-    object-fit: cover;
-    border-radius: 20px;
-    box-shadow: 0 0 50px rgba(255, 0, 0, 0.2);
-    animation: float 4s ease-in-out infinite;
-}
-
-.mask-symbiote {
-    /* Hide the top image from the bottom up initially so GSAP can reveal it! */
-    clip-path: inset(100% 0% 0% 0%);
-    -webkit-clip-path: inset(100% 0% 0% 0%);
-}
-
-.symbiote-text {
-    position: absolute;
-    font-family: "Cinzel", serif;
-    font-size: 40px;
-    color: white;
-    letter-spacing: 10px;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-    z-index: 10;
-    opacity: 0;
-    /* Hidden initially */
-    width: auto;
-}
-
-.symbiote-text.left {
-    left: 15%;
-    text-align: right;
-}
-
-.symbiote-text.right {
-    right: 5%;
-    text-align: left;
-}
 
 /* Title section text */
 .title-text {

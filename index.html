@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peater Parker</title>
+    <title>Spider-Man BND</title>
+    <link rel="icon" type="image/png" href="Assets/LoaderLogo.png">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Great+Vibes&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css?v=2">
@@ -20,6 +21,7 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 </head>
 
 <body>
@@ -123,7 +125,6 @@
             <h1 id="bigtext1">Surrounded</h1>
             <h2 id="bigtext2">but never finished</h2>
         </div>
-        <script type="module" src="script2.js"></script>
     </section>
 
     <section class="pagefive">
@@ -134,13 +135,9 @@
         </div>
     </section>
 
-    <section id="symbiote-section">
-        <div class="mask-container">
-            <canvas class="particles-bg"></canvas>
-            <h1 class="symbiote-text left">A NEW SUIT</h1>
-            <img class="mask-symbiote" src="Assets/Pics/brand.png" alt="Symbiote Spider-Man Suit">
-            <h1 class="symbiote-text right">FOR A NEW WAR</h1>
-        </div>
+    <section id="page5-embed"
+        style="width: 100vw; height: 100vh; padding: 0; margin: 0; overflow: hidden; position: relative;">
+        <iframe src="Page5/index.html" style="width: 100%; height: 100%; border: none; pointer-events: auto;"></iframe>
     </section>
 
     <section class="Title">
@@ -165,7 +162,6 @@
         <div class="cast">
             <p>CAST MEMBERS</p>
         </div>
-        <script type="module" src="circular-gallery.js"></script>
         <div class="cast-container">
         </div>
     </section>
@@ -444,7 +440,7 @@
         })();
     </script>
 
-    <script src="particles.js"></script>
+    <script src="script2.js"></script>
     <script src="dome-gallery.js"></script>
     <script type="module" src="app.js"></script>
 </body>

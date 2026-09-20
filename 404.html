@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — Dimension Lost</title>
+    <meta name="robots" content="noindex">
+    <meta name="description" content="The requested location doesn't exist in this universe.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Grotesk:wght@300;400;500&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #05070D;
+            --text-primary: #F5F5F5;
+            --text-secondary: rgba(245, 245, 245, 0.55);
+            --accent: #D7192E;
+            --font-primary: 'Inter', sans-serif;
+            --font-mono: 'Space Grotesk', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            width: 100vw; height: 100vh;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Boot Sequence */
+        #boot-sequence {
+            position: fixed; inset: 0; z-index: 999;
+            background-color: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            transition: opacity 0.6s ease;
+        }
+        #boot-text { opacity: 0; transition: opacity 0.2s ease; }
+
+        /* Scene */
+        #scene {
+            position: fixed; inset: 0; z-index: 1;
+            opacity: 0; transition: opacity 1.5s ease;
+            display: flex;
+        }
+        #scene.ready { opacity: 1; }
+
+        /* Background */
+        #bg-wrapper {
+            position: absolute; inset: -5%; /* Room for parallax */
+            z-index: 1;
+            will-change: transform;
+        }
+        #bg {
+            width: 100%; height: 100%;
+            background-image: url('Assets/NeonCity.png');
+            background-size: cover; 
+            background-position: center;
+            filter: brightness(0.35) contrast(1.15) desaturate(0.2); 
+        }
+        #vignette {
+            position: absolute; inset: 0; z-index: 2;
+            background: radial-gradient(circle at center, transparent 20%, rgba(5,7,13,0.9) 100%);
+            pointer-events: none;
+        }
+
+        /* Character */
+        #character-positioner {
+            position: absolute; right: 8%; top: 0;
+            height: 70vh;
+            z-index: 3;
+            transform-origin: top center;
+        }
+        #character-parallax {
+            height: 100%;
+            will-change: transform;
+        }
+        #character {
+            height: 100%; width: auto; object-fit: contain; object-position: top;
+            animation: float 8s ease-in-out infinite;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(12px) rotate(0.5deg); }
+        }
+
+        /* HUD */
+        .hud {
+            position: absolute; z-index: 4;
+            font-family: var(--font-mono);
+            font-size: 11px; letter-spacing: 1.5px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            line-height: 1.6;
+        }
+        .hud.top-left { top: 40px; left: 40px; }
+        .hud.top-right { top: 40px; right: 40px; text-align: right; }
+        .hud.bottom-left { bottom: 40px; left: 40px; }
+        .hud.bottom-right { bottom: 40px; right: 40px; text-align: right; }
+
+        .hud-title { color: var(--text-secondary); font-size: 10px; opacity: 0.8; margin-bottom: 2px;}
+        .indicator {
+            display: inline-block; width: 5px; height: 5px;
+            background-color: var(--accent);
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* Main Content */
+        #content {
+            position: absolute; left: 8%; top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            max-width: 500px;
+        }
+        .error-code {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(100px, 12vw, 160px);
+            font-weight: 900;
+            line-height: 1;
+            color: var(--text-primary);
+            margin-bottom: -5px;
+            text-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            letter-spacing: -2px;
+            position: relative;
+            animation: glitch-anim 5s infinite;
+        }
+        .error-code::before, .error-code::after {
+            content: attr(data-text);
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+        .error-code::before {
+            color: var(--accent);
+            z-index: -1;
+            animation: glitch-anim-1 3s infinite linear alternate-reverse;
+            clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+            transform: translate(-4px, -2px);
+            opacity: 0.8;
+        }
+        .error-code::after {
+            color: #168CFF;
+            z-index: -2;
+            animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
+            clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+            transform: translate(4px, 2px);
+            opacity: 0.8;
+        }
+        @keyframes glitch-anim {
+            0%, 95%, 100% { transform: none; }
+            96% { transform: skewX(2deg) translate(-2px, 0); }
+            97% { transform: skewX(-2deg) translate(2px, 0); }
+            98% { transform: none; }
+        }
+        @keyframes glitch-anim-1 {
+            0%, 90%, 100% { opacity: 0; transform: translate(0); }
+            92% { opacity: 0.8; transform: translate(-5px, -2px); }
+            94% { opacity: 0.8; transform: translate(5px, 2px); }
+        }
+        @keyframes glitch-anim-2 {
+            0%, 90%, 100% { opacity: 0; transform: translate(0); }
+            92% { opacity: 0.8; transform: translate(5px, 2px); }
+            94% { opacity: 0.8; transform: translate(-5px, -2px); }
+        }
+        .error-title {
+            font-family: var(--font-mono);
+            font-size: clamp(16px, 2vw, 22px);
+            font-weight: 400;
+            letter-spacing: 6px;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .error-desc {
+            font-size: clamp(14px, 1.2vw, 16px);
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 45px;
+            font-weight: 300;
+            max-width: 90%;
+        }
+
+        /* Button */
+        #return-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            background: rgba(5,7,13,0.3);
+            border: 1px solid rgba(245,245,245,0.15);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 12px; font-weight: 400;
+            letter-spacing: 3px;
+            padding: 16px 36px;
+            cursor: pointer;
+            border-radius: 2px;
+            backdrop-filter: blur(8px);
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            outline: none;
+            text-transform: uppercase;
+        }
+        #return-btn::before {
+            content: '';
+            position: absolute; left: -1px; top: 20%; height: 60%; width: 2px;
+            background-color: var(--accent);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #return-btn:hover {
+            border-color: rgba(245,245,245,0.35);
+            background: rgba(5,7,13,0.7);
+            transform: translateY(-2px);
+        }
+        #return-btn:hover::before {
+            top: 0; height: 100%;
+        }
+        #return-btn:focus-visible {
+            outline: 1px solid var(--text-primary);
+            outline-offset: 4px;
+        }
+        #return-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            #character-positioner { right: 0; height: 75vh; }
+            #content { left: 6%; }
+        }
+        @media (max-width: 768px) {
+            #character-positioner { right: -5%; height: 65vh; opacity: 0.9; }
+            .hud.top-right, .hud.bottom-right { display: none; }
+            .hud.top-left { top: 25px; left: 25px; }
+            .hud.bottom-left { bottom: 25px; left: 25px; }
+            #content { left: 25px; }
+        }
+        @media (max-width: 480px) {
+            #scene { flex-direction: column; }
+            #bg-wrapper { inset: -2%; }
+            #character-positioner { 
+                position: relative; right: auto; top: auto; transform: none; 
+                height: 50vh; margin: 0 auto; margin-top: 10vh; z-index: 2;
+                display: flex; justify-content: center;
+            }
+            #content { 
+                position: relative; left: auto; top: auto; transform: none; 
+                padding: 0 25px; z-index: 5; margin-top: -30px; text-align: left;
+            }
+            .hud { display: none; }
+            .error-code { margin-bottom: 0; }
+            .error-desc { max-width: 100%; margin-bottom: 35px; }
+            #return-btn { width: 100%; }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            #character { animation: none; transform: none; }
+            #bg-wrapper, #character-parallax { transform: none !important; transition: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Boot Sequence -->
+    <div id="boot-sequence" role="status" aria-live="polite">
+        <div id="boot-text"></div>
+    </div>
+
+    <!-- Main Scene -->
+    <main id="scene" aria-hidden="true">
+        <div id="bg-wrapper">
+            <div id="bg"></div>
+        </div>
+        <div id="vignette"></div>
+
+        <div id="character-positioner">
+            <div id="character-parallax">
+                <img id="character" src="Assets/Spidey.png" alt="Spider-themed superhero looking over the city">
+            </div>
+        </div>
+
+        <!-- HUD Elements -->
+        <div class="hud top-left" aria-hidden="true">
+            <div class="hud-title">SPIDER-SUIT SYSTEM</div>
+            <div>SYSTEM ONLINE</div>
+        </div>
+        <div class="hud top-right" aria-hidden="true">
+            <div class="hud-title">LOCATION</div>
+            <div>EARTH-404</div>
+        </div>
+        <div class="hud bottom-left" aria-hidden="true">
+            <div class="hud-title">SYSTEM STATUS</div>
+            <div><span class="indicator"></span>PAGE NOT FOUND</div>
+        </div>
+        <div class="hud bottom-right" aria-hidden="true">
+            <div class="hud-title">RETURN ROUTE</div>
+            <div>AVAILABLE</div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="content">
+            <h1 class="error-code" data-text="404">404</h1>
+            <h2 class="error-title">DIMENSION LOST</h2>
+            <p class="error-desc">The requested location doesn't exist in this universe.</p>
+            <button id="return-btn" aria-label="Return to base">
+                RETURN TO BASE &rarr;
+            </button>
+        </div>
+    </main>
+
+    <noscript>
+        <style>
+            #boot-sequence { display: none; }
+            #scene { opacity: 1; }
+        </style>
+    </noscript>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const bootSeq = document.getElementById('boot-sequence');
+            const bootText = document.getElementById('boot-text');
+            const scene = document.getElementById('scene');
+
+            // --- Boot Sequence ---
+            if (reducedMotion) {
+                bootSeq.style.display = 'none';
+                scene.classList.add('ready');
+                scene.setAttribute('aria-hidden', 'false');
+            } else {
+                const steps = [
+                    { text: 'SYSTEM INITIALIZING...', time: 100 },
+                    { text: 'SYSTEM ONLINE', time: 900 },
+                    { text: 'LOCATION NOT FOUND', time: 1700 }
+                ];
+
+                steps.forEach(step => {
+                    setTimeout(() => {
+                        bootText.style.opacity = 0;
+                        setTimeout(() => {
+                            bootText.textContent = step.text;
+                            bootText.style.opacity = 1;
+                        }, 150); // fade transition
+                    }, step.time);
+                });
+
+                // Fade into scene at 2.4s
+                setTimeout(() => {
+                    bootSeq.style.opacity = 0;
+                    scene.classList.add('ready');
+                    scene.setAttribute('aria-hidden', 'false');
+                    setTimeout(() => {
+                        bootSeq.style.display = 'none';
+                    }, 600);
+                }, 2600);
+            }
+
+            // --- Button Navigation ---
+            const returnBtn = document.getElementById('return-btn');
+            if (returnBtn) {
+                returnBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = '/';
+                });
+            }
+
+            // --- Subtle Mouse Parallax ---
+            if (!reducedMotion) {
+                const bgWrap = document.getElementById('bg-wrapper');
+                const charParallax = document.getElementById('character-parallax');
+                
+                let mouseX = 0;
+                let mouseY = 0;
+                let targetX = 0;
+                let targetY = 0;
+
+                // Listen to mouse movement
+                window.addEventListener('mousemove', (e) => {
+                    targetX = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
+                    targetY = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+                });
+                
+                // Also support touch for tablets/mobile
+                window.addEventListener('touchmove', (e) => {
+                    const t = e.touches[0];
+                    targetX = (t.clientX / window.innerWidth - 0.5) * 2;
+                    targetY = (t.clientY / window.innerHeight - 0.5) * 2;
+                }, { passive: true });
+
+                const updateParallax = () => {
+                    // Easing factor for smoothness
+                    mouseX += (targetX - mouseX) * 0.05;
+                    mouseY += (targetY - mouseY) * 0.05;
+
+                    // Apply subtle transforms
+                    if (bgWrap) {
+                        // Background moves slightly opposite to cursor
+                        bgWrap.style.transform = `translate(${mouseX * -8}px, ${mouseY * -6}px)`;
+                    }
+                    if (charParallax) {
+                        // Character moves slightly with cursor (foreground depth)
+                        charParallax.style.transform = `translate(${mouseX * 12}px, ${mouseY * 8}px)`;
+                    }
+
+                    requestAnimationFrame(updateParallax);
+                };
+                updateParallax();
+            }
+        });
+    </script>
+</body>
+</html>

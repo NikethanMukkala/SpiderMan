@@ -9,6 +9,7 @@ import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 console.log("Three.js loaded successfully!");
 
+// ---------------------------------------------
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
@@ -272,78 +273,53 @@ if (textElement) {
 
 
 //animation for peter parker at page5
-const textElement2 = document.getElementById("bigtext4");
-if (textElement2) {
-    const text2 = textElement2.textContent;
-    textElement2.textContent = "";
-    text2.split("").forEach((letter2, index2) => {
-        const span2 = document.createElement("span");
-        span2.textContent = letter2 === " " ? "\u00A0" : letter2;
-        textElement2.appendChild(span2);
+const textElement3 = document.getElementById("bigtext3");
+const textElement4 = document.getElementById("bigtext4");
+
+if (textElement3 && textElement4) {
+    const text3 = textElement3.textContent.trim();
+    textElement3.textContent = "";
+    text3.split("").forEach((letter) => {
+        const span = document.createElement("span");
+        span.textContent = letter === " " ? "\u00A0" : letter;
+        span.style.opacity = "0";
+        span.style.transform = "translateY(30px)";
+        span.style.display = "inline-block";
+        textElement3.appendChild(span);
     });
-    gsap.to("#bigtext4 span", {
-        color: 'red',
-        stagger: 0.1,
+
+    const text4 = textElement4.textContent.trim();
+    textElement4.textContent = "";
+    text4.split("").forEach((letter) => {
+        const span = document.createElement("span");
+        span.textContent = letter === " " ? "\u00A0" : letter;
+        span.style.opacity = "0";
+        span.style.transform = "translateY(30px)";
+        span.style.display = "inline-block";
+        textElement4.appendChild(span);
+    });
+
+    const tl = gsap.timeline({
         scrollTrigger: {
             trigger: ".pagefive",
             start: "top top",
-            end: "+=320%",
+            end: "+=120%",
             scrub: 1
         }
     });
+
+    tl.to("#bigtext3 span", {
+        opacity: 1,
+        y: 0,
+        stagger: 0.1,
+        ease: "power2.out"
+    })
+        .to("#bigtext4 span", {
+            opacity: 1,
+            y: 0,
+            color: 'red',
+            stagger: 0.1,
+            ease: "power2.out"
+        }, "<20%");
 }
 
-// Symbiote Infection Scroll Animation
-gsap.fromTo(".mask-symbiote",
-    { clipPath: "inset(100% 0% 0% 0%)" },
-    {
-        clipPath: "inset(0% 0% 0% 0%)", // Reveal fully from bottom up
-        ease: "none",
-        scrollTrigger: {
-            trigger: "#symbiote-section",
-            start: "top top", // Start when section hits top of screen
-            end: "+=120%", // End after scrolling 200vh
-            scrub: 1, // Tie exactly to the scroll bar
-        }
-    }
-);
-
-// Fade in the text (starts exactly with the mask reveal now)
-gsap.to(".symbiote-text", {
-    opacity: 1,
-    y: -50,
-    ease: "power2.out",
-    scrollTrigger: {
-        trigger: "#symbiote-section",
-        start: "top top", // Match the mask start!
-        end: "+=90%",
-        scrub: true,
-    }
-});
-
-// Animation for Peter Parker at Suit section
-// We use querySelectorAll to grab BOTH the left and right text!
-const symbioteTexts = document.querySelectorAll(".symbiote-text");
-
-symbioteTexts.forEach((textElement) => {
-    const text = textElement.textContent;
-    textElement.textContent = "";
-
-    text.split("").forEach((letter) => {
-        const span = document.createElement("span");
-        span.textContent = letter === " " ? "\u00A0" : letter;
-        textElement.appendChild(span);
-    });
-});
-
-// Animate the spans changing color to red automatically AFTER the fade-in finishes!
-gsap.to(".symbiote-text span", {
-    color: 'red',
-    stagger: 0.1,
-    duration: 0.2,
-    scrollTrigger: {
-        trigger: "#symbiote-section",
-        start: "top -90%", // Triggers exactly when the fade-in above finishes (+=90%)
-        toggleActions: "play none none reverse" // Plays on its own, no scrubbing!
-    }
-});
