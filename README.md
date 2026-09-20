@@ -1,12 +1,14 @@
 # Spider-Man: Cinematic Web Experience
 
-![Spider-Man Banner](Assets/LoaderLogo.png)
+<div align="center">
+  <img src="Assets/LoaderLogo.png" alt="Spider-Man Banner" width="150" />
+</div>
 
 A high-performance, cinematic 3D scrolling experience dedicated to Spider-Man. This project leverages WebGL and frame-by-frame canvas animations synced to scroll events, creating a deeply immersive storytelling environment. 
 
 🌐 **Live Demo:** [spiderman.nikethan.qzz.io](https://spiderman.nikethan.qzz.io)
 
-**Live 404 Page Demo:** https://spiderman.nikethan.qzz.io/404.html
+⚠️ **Live 404 Page Demo:** [spiderman.nikethan.qzz.io/404.html](https://spiderman.nikethan.qzz.io/404.html)
 
 ---
 
